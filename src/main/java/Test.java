@@ -10,23 +10,13 @@ public class Test {
 
     public Test(){}
 
-    boolean lockc = true;
-
-    public void setLockc(boolean lockc) {
-        this.lockc = lockc;
-    }
-
-    public boolean getLockc(){
-        return lockc;
-    }
 
 
 
     public static void main(String[] args) throws ControllerUnpluggedException {
         ControllerManager controllers = new ControllerManager();
         controllers.initSDLGamepad();
-        boolean locka = true;
-        boolean lockb = true;
+
 
 
 
@@ -53,7 +43,54 @@ public class Test {
 
 
                     }
+
+                    if (currController.isButtonJustPressed(ControllerButton.Y)) {
+
+                        String ord = word.toString();
+
+                        switch (ord){
+                            case "SL" :
+                                wordprint.add('A');
+                                break;
+                            case "LSSS" :
+                                wordprint.add('B');
+                                break;
+                            case "LSLS" :
+                                wordprint.add('C');
+                                break;
+                            case "LSS" :
+                                wordprint.add('D');
+                                break;
+                            case "S" :
+                                wordprint.add('E');
+                                break;
+                            case "SSLS" :
+                                wordprint.add('F');
+                                break;
+                            case "LLS" :
+                                wordprint.add('G');
+                                break;
+                            case "SSSS" :
+                                wordprint.add('H');
+                                break;
+                            case "SS" :
+                                wordprint.add('I');
+                                break;
+                            case "SLLL" :
+                                wordprint.add('J');
+                                break;
+                            case "LSL" :
+                                wordprint.add('K');
+                                break;
+                        }
+
+                        word.setLength(0);
+
+                        break;
+
+                    }
                     if (currController.isButtonJustPressed(ControllerButton.B)) {
+
                         for (int j = 0; j < wordprint.size(); j++) {
                             System.out.print(wordprint.get(j));
 
@@ -62,29 +99,6 @@ public class Test {
 
 
                     }
-                    if (currController.isButtonJustPressed(ControllerButton.Y)) {
-
-                        if ("SL".contentEquals(word)) {
-                            wordprint.add('A');
-                            System.out.println("APPENDED CHARACTER A");
-                        } else if ("S".contentEquals(word)) {
-                            wordprint.add('E');
-                            System.out.println("APPENDED CHARACTER E");
-                        } else if ("L".contentEquals(word)) {
-                            System.out.println("APPENDED CHARACTER T");
-                            wordprint.add('T');
-                        }
-                        word.setLength(0);
-
-
-
-
-                        break;
-
-
-
-                    }
-
                 } catch (ControllerUnpluggedException e) {
                     break;
                 }
