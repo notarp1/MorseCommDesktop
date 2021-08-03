@@ -3,6 +3,7 @@ package main.java;
 
 import com.studiohartman.jamepad.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Test {
@@ -50,18 +51,40 @@ public class Test {
 
                         wordprint = new ArrayList<Character>();
 
+
+                        long timer = 0;
+
                         //ITERER OVER ORD OG GENSKAB I MORSE KODE
                         for (int j = 0; j < fullword.size(); j++) {
                             String stringParse = fullword.get(j);
-
+                            timer += 1000;
                             for (int k = 0; k < stringParse.length(); k++) {
 
+
                                 if(stringParse.charAt(k) == 'S'){
-                                    //controllers.doVibration(0, 1, 1, 150);
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    controllers.doVibration(0, 1, 1, 150);
+                                                }
+                                            },
+                                            500 + timer
+                                    );
+
 
                                 } else {
-                                    System.out.println("HA2HA");
-                                    //controllers.doVibration(0,1, 1, 400);
+
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    controllers.doVibration(0,1, 1, 400);
+                                                }
+                                            },
+                                            500 + timer
+                                    );
+
                                 }
 
 
