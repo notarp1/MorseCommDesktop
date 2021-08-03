@@ -28,6 +28,7 @@ public class MyView extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     Controller con = Controller.getInstance();
                     con.getUserWord(inputUser.getText());
+                    inputUser.setText("");
 
                 }
 

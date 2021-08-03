@@ -104,7 +104,7 @@ public class Controller {
                                                 @Override
                                                 public void run() {
                                                     System.out.println("Short");
-                                                    controllers.doVibration(0, 1, 1, 200);
+                                                    controllers.doVibration(0, 1, 1, 150);
                                                 }
                                             },
                                             700 + timer
@@ -293,6 +293,8 @@ public class Controller {
                 view.currinput.setText("Z");
                 System.out.print("Z");
                 break;
+            default:
+                morseLetterCombination = "";
 
         }
 
@@ -411,7 +413,7 @@ public class Controller {
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    controllers.doVibration(0, 1, 1, 200);
+                                    controllers.doVibration(0, 1, 1, 150);
                                 }
                             },
                             500 + timer
