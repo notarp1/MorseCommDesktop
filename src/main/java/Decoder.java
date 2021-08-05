@@ -26,6 +26,46 @@ public class Decoder {
      */
     ArrayList<Character> decodeMorse(String morseLetterCombination, ArrayList<Character> word, MyView view) {
         switch (morseLetterCombination) {
+            case "SLLLL":
+                word.add('1');
+                view.currinput.setText("1");
+                break;
+            case "SSLLL":
+                word.add('2');
+                view.currinput.setText("2");
+                break;
+            case "SSSLL":
+                word.add('3');
+                view.currinput.setText("3");
+                break;
+            case "SSSSL":
+                word.add('4');
+                view.currinput.setText("4");
+                break;
+            case "SSSSS":
+                word.add('5');
+                view.currinput.setText("5");
+                break;
+            case "LSSSS":
+                word.add('6');
+                view.currinput.setText("6");
+                break;
+            case "LLSSS":
+                word.add('7');
+                view.currinput.setText("7");
+                break;
+            case "LLLSS":
+                word.add('8');
+                view.currinput.setText("8");
+                break;
+            case "LLLLS":
+                word.add('9');
+                view.currinput.setText("9");
+                break;
+            case "LLLLL":
+                word.add('0');
+                view.currinput.setText("0");
+                break;
             case "SL":
                 word.add('A');
                 view.currinput.setText("A");
@@ -175,6 +215,36 @@ public class Decoder {
             switch (s) {
                 case ' ':
                     userWordPrint.add(".");
+                    break;
+                case '1':
+                    userWordPrint.add("SLLLL");
+                    break;
+                case '2':
+                    userWordPrint.add("SSLLL");
+                    break;
+                case '3':
+                    userWordPrint.add("SSSLL");
+                    break;
+                case '4':
+                    userWordPrint.add("SSSSL");
+                    break;
+                case '5':
+                    userWordPrint.add("SSSSS");
+                    break;
+                case '6':
+                    userWordPrint.add("LSSSS");
+                    break;
+                case '7':
+                    userWordPrint.add("LLSSS");
+                    break;
+                case '8':
+                    userWordPrint.add("LLLSS");
+                    break;
+                case '9':
+                    userWordPrint.add("LLLLS");
+                    break;
+                case '0':
+                    userWordPrint.add("LLLLL");
                     break;
                 case 'a':
                     userWordPrint.add("SL");
