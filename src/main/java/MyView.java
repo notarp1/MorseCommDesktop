@@ -36,13 +36,7 @@ public class MyView extends JFrame {
         });
 
     }
-    public JLabel getTekst() {
-        return tekst;
-    }
 
-    public void setTekst(JLabel tekst) {
-        this.tekst = tekst;
-    }
 
     public static void main(String[] args){
 

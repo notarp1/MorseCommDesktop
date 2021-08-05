@@ -5,33 +5,25 @@ import com.studiohartman.jamepad.ControllerIndex;
 import com.studiohartman.jamepad.ControllerManager;
 import com.studiohartman.jamepad.ControllerUnpluggedException;
 
-import javax.swing.text.View;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Controller {
 
-    ControllerManager controllers;
-    StringBuilder morseLetter;
-    ArrayList<Character> word;
-    ControllerIndex currController;
-    ArrayList<String> morseLetterSentence;
-    Scanner sc;
-    MyView view;
-
-    public void setView(MyView view) {
-        this.view = view;
-    }
+    private ControllerManager controllers;
+    private StringBuilder morseLetter;
+    private ArrayList<Character> word;
+    private ControllerIndex currController;
+    private ArrayList<String> morseLetterSentence;
+    private Decoder decoder;
+    private MyView view;
 
     private static Controller INSTANCE = null;
-    private String info = "Initial info class";
 
-    private Controller() {
 
-    }
+    private Controller() {}
 
-    public static Controller getInstance() {
+    static Controller getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new Controller();
         }
@@ -39,115 +31,88 @@ public class Controller {
         return INSTANCE;
     }
 
+    /** Method for setting the view from the MyView.java class */
+    void setView(MyView view) {
+        this.view = view;
+    }
 
-
-    public void ini(){
-
+    /** Method for initiating value */
+    void ini(){
+        decoder = Decoder.getInstance();
         controllers = new ControllerManager();
         controllers.initSDLGamepad();
         morseLetter = new StringBuilder();
-        word = new ArrayList<Character>();
+        word = new ArrayList<>();
         currController = controllers.getControllerIndex(0);
         morseLetterSentence = new ArrayList<>();
-        sc = new Scanner(System.in);
 
         System.out.println("PRESS A FOR SHORT \nPRESS X FOR LONG \nPRESS Y TO ADD LETTER \nPRESS B TO SEND WORD");
         run();
     }
 
 
-
+    /**
+     * Method that listens for key-events from the controller
+     */
     private void run(){
-
         while (true) {
             while (true) {
 
                 try {
-
+                    /* If button A is pressed append S for short to the morse-letter */
                     if (currController.isButtonJustPressed(ControllerButton.A)) {
                         controllers.doVibration(0, 1, 1, 150);
                         morseLetter.append("S");
 
                     }
+                    /* If button X is pressed append L for long to the morse-letter */
                     if (currController.isButtonJustPressed(ControllerButton.X)) {
                         controllers.doVibration(0, 1, 1, 400);
                         morseLetter.append("L");
-
-
                     }
+
+                    /* If button Y is pressed add the letter to the total sentence with the method addLetter() */
+                    if (currController.isButtonJustPressed(ControllerButton.Y)) {
+                        addLetter();
+                        break;
+                    }
+                    /* If button B is pressed display word to GUI, vibrate word to user */
                     if (currController.isButtonJustPressed(ControllerButton.B)) {
 
-                        //PRINT ORD
-                        StringBuilder f = new StringBuilder();
-                        for (int j = 0; j < word.size(); j++) {
-                            f.append(word.get(j));
+                        //Convert Character array to String
+                        StringBuilder wordToDisplay = new StringBuilder();
+                        for (Character character : word) wordToDisplay.append(character);
+                        view.tekst.setText(wordToDisplay.toString());
 
-                        }
-                        String test = f.toString();
-
-                        view.tekst.setText(test);
+                        //Reset word array, so a new word can be entered
                         word = new ArrayList<>();
+
+                        //Set timer to zero, timer is used to output vibration in the correct order
                         long timer = 0;
 
-                        //ITERER OVER ORD OG GENSKAB I MORSE KODE
+                        //Iterate over the morse-letter sentence, to recreate the word as vibrations
                         for (int j = 0; j < morseLetterSentence.size(); j++) {
-                            System.out.println(morseLetterSentence.get(j));
-                            String stringParse = morseLetterSentence.get(j);
+                            String morseToParse = morseLetterSentence.get(j);
+
+                            //Add delay after each letter
                             if(j != 0) timer += 1000;
-                            for (int k = 0; k < stringParse.length(); k++) {
+
+                            for (int k = 0; k < morseToParse.length(); k++) {
                                 timer += 1000;
 
-                                if(stringParse.charAt(k) == 'S'){
+                                if(morseToParse.charAt(k) == 'S'){
+                                    System.out.println("Short");
+                                    vibrate(timer, 700, 150);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    System.out.println("Short");
-                                                    controllers.doVibration(0, 1, 1, 150);
-                                                }
-                                            },
-                                            700 + timer
-                                    );
-
-
-                                } else if (stringParse.charAt(k) == 'L'){
-
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-
-                                                    System.out.println("Long");
-                                                    controllers.doVibration(0,1, 1, 400);
-                                                }
-                                            },
-                                            500 + timer
-                                    );
-                                } else {
-                                    System.out.println("SPACE");
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                                } else if (morseToParse.charAt(k) == 'L'){
+                                    System.out.println("Long");
+                                    vibrate(timer, 500, 400);
                                 }
                             }
                         }
-
-                        morseLetterSentence = new ArrayList<String>();
-
-
-
+                        morseLetterSentence = new ArrayList<>();
                     }
-                    if (currController.isButtonJustPressed(ControllerButton.Y)) {
 
-                        getWord();
-
-                        break;
-
-                    }
 
                 } catch (ControllerUnpluggedException e) {
                     break;
@@ -157,251 +122,64 @@ public class Controller {
     }
 
 
-    private void getWord() {
+    /**
+     * Method that handles controller vibration
+     * @param timer what value to be added after each vibration iteration
+     * @param inival start delay for vibration
+     * @param duration how long the controller should vibrate
+     */
+    private void vibrate(long timer, long inival, int duration) {
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        controllers.doVibration(0, 1, 1, duration);
+                    }
+                },
+                inival + timer
+        );
+    }
+
+    /**
+     * Method which adds one letter to a sentence, from the user.
+     */
+
+    private void addLetter() {
+
+        //Convert StringBuilder to String
         String morseLetterCombination = morseLetter.toString();
 
 
-        //PRINT OG TILFØJ BOGSTAV
-        switch (morseLetterCombination){
-            case "SL" :
-                word.add('A');
-                view.currinput.setText("A");
-                System.out.print("A");
-                break;
-            case "LSSS" :
-                word.add('B');
-                view.currinput.setText("B");
-                System.out.print("B");
-                break;
-            case "LSLS" :
-                word.add('C');
-                view.currinput.setText("C");
-                System.out.print("C");
-                break;
-            case "LSS" :
-                word.add('D');
-                view.currinput.setText("D");
-                System.out.print("D");
-                break;
-            case "S" :
-                word.add('E');
-                view.currinput.setText("E");
-                System.out.print("E");
-                break;
-            case "SSLS" :
-                word.add('F');
-                view.currinput.setText("F");
-                System.out.print("F");
-                break;
-            case "LLS" :
-                word.add('G');
-                view.currinput.setText("G");
-                System.out.print("G");
-                break;
-            case "SSSS" :
-                word.add('H');
-                view.currinput.setText("H");
-                System.out.print("H");
-                break;
-            case "SS" :
-                word.add('I');
-                view.currinput.setText("I");
-                System.out.print("I");
-                break;
-            case "SLLL" :
-                word.add('J');
-                view.currinput.setText("J");
-                System.out.print("J");
-                break;
-            case "LSL" :
-                word.add('K');
-                view.currinput.setText("K");
-                System.out.print("K");
-                break;
-            case "SLSS" :
-                word.add('L');
-                view.currinput.setText("L");
-                System.out.print("L");
-                break;
-            case "LL" :
-                word.add('M');
-                view.currinput.setText("M");
-                System.out.print("M");
-                break;
-            case "LS" :
-                word.add('N');
-                view.currinput.setText("N");
-                System.out.print("N");
-                break;
-            case "LLL" :
-                word.add('O');
-                view.currinput.setText("O");
-                System.out.print("O");
-                break;
-            case "SLLS" :
-                word.add('P');
-                view.currinput.setText("P");
-                System.out.print("P");
-                break;
-            case "LLSL" :
-                word.add('Q');
-                view.currinput.setText("Q");
-                System.out.print("Q");
-                break;
-            case "SLS" :
-                word.add('R');
-                view.currinput.setText("R");
-                System.out.print("R");
-                break;
-            case "SSS" :
-                word.add('S');
-                view.currinput.setText("S");
-                System.out.print("S");
-                break;
-            case "L" :
-                word.add('T');
-                view.currinput.setText("T");
-                System.out.print("T");
-                break;
-            case "SSL" :
-                word.add('U');
-                view.currinput.setText("U");
-                System.out.print("U");
-                break;
-            case "SSSL" :
-                word.add('V');
-                view.currinput.setText("V");
-                System.out.print("V");
-                break;
-            case "SLL" :
-                word.add('W');
-                view.currinput.setText("W");
-                System.out.print("W");
-                break;
-            case "LSSL" :
-                word.add('X');
-                view.currinput.setText("X");
-                System.out.print("X");
-                break;
-            case "LSLL" :
-                word.add('Y');
-                view.currinput.setText("Y");
-                System.out.print("Y");
-                break;
-            case "LLSS" :
-                word.add('Z');
-                view.currinput.setText("Z");
-                System.out.print("Z");
-                break;
-            default:
-                morseLetterCombination = "";
+        //Decode one morse-letter combination to an alphabet letter
+        word = decoder.decodeMorse(morseLetterCombination, word, view);
 
-        }
-
-        //TILFØJ ORD OG NULSTIL ORD
+        //Add the morse-letter combination to a String array, for future vibration feedback of the written word.
         morseLetterSentence.add(morseLetterCombination);
+
+        //Reset the morse-letter, so a new one can be written
         morseLetter.setLength(0);
     }
 
-    public void getUserWord(String word){
-        System.out.println(word);
-        ArrayList<String> userWordPrint = new ArrayList<>();
+    /**
+     * Method which handles a sentence written from a keyboard to the program
+     * @param sentenceInput the word which the user has entered
+     */
+    public void getUserWord(String sentenceInput){
+
+        ArrayList<String> textToMorse = new ArrayList<>();
+
+        //Decode the sentence and convert
+        textToMorse = decoder.decodeText(sentenceInput, textToMorse);
 
 
-        for (int i = 0; i < word.length(); i++) {
-            Character s = word.charAt(i);
-            switch (s){
-                case ' ':
-                    userWordPrint.add(".");
-                    break;
-                case 'a':
-                    userWordPrint.add("SL");
-                    break;
-                case 'b':
-                    userWordPrint.add("LSSS");
-                    break;
-                case 'c':
-                    userWordPrint.add("LSLS");
-                    break;
-                case 'd':
-                    userWordPrint.add("LSS");
-                    break;
-                case 'e':
-                    userWordPrint.add("S");
-                    break;
-                case 'f':
-                    userWordPrint.add("SSLS");
-                    break;
-                case 'g':
-                    userWordPrint.add("LLS");
-                    break;
-                case 'h':
-                    userWordPrint.add("SSSS");
-                    break;
-                case 'i':
-                    userWordPrint.add("SS");
-                    break;
-                case 'j':
-                    userWordPrint.add("SLLL");
-                    break;
-                case 'k':
-                    userWordPrint.add("LSL");
-                    break;
-
-                case 'l':
-                    userWordPrint.add("SLSS");
-                    break;
-                case 'm':
-                    userWordPrint.add("LL");
-                    break;
-                case 'n':
-                    userWordPrint.add("LS");
-                    break;
-                case 'o':
-                    userWordPrint.add("LLL");
-                    break;
-                case 'p':
-                    userWordPrint.add("SLLS");
-                    break;
-                case 'q':
-                    userWordPrint.add("LLSL");
-                    break;
-                case 'r':
-                    userWordPrint.add("SLS");
-                    break;
-                case 's':
-                    userWordPrint.add("SSS");
-                    break;
-                case 't':
-                    userWordPrint.add("L");
-                    break;
-                case 'u':
-                    userWordPrint.add("SSL");
-                    break;
-                case 'v':
-                    userWordPrint.add("SSSL");
-                    break;
-                case 'w':
-                    userWordPrint.add("SLL");
-                    break;
-                case 'x':
-                    userWordPrint.add("LSSL");
-                    break;
-                case 'y':
-                    userWordPrint.add("LSLL");
-                    break;
-                case 'z':
-                    userWordPrint.add("LLSS");
-                    break;
-            }
-
-        }
-
-        //Vibration
+        //Initialize timer
         long timer = 0;
-        for (int i = 0; i < userWordPrint.size(); i++) {
-            String decode = userWordPrint.get(i);
+
+        //Same process as in line 93
+        for (int i = 0; i < textToMorse.size(); i++) {
+            String decode = textToMorse.get(i);
             if(i != 0) timer += 1000;
+
             //ITERER OVER ORD OG GENSKAB I MORSE KODE
             for (int j = 0; j < decode.length(); j++) {
                 Character stringParse = decode.charAt(j);
@@ -409,40 +187,24 @@ public class Controller {
 
                 if(stringParse == 'S'){
                     System.out.println("Short");
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    controllers.doVibration(0, 1, 1, 150);
-                                }
-                            },
-                            500 + timer
-                    );
-
+                    vibrate(timer, 700, 150);
 
                 } else if (stringParse == 'L'){
                     System.out.println("Long");
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    controllers.doVibration(0,1, 1, 400);
-                                }
-                            },
-                            500 + timer
-                    );
-                } else {
+                    vibrate(timer, 500, 400);
+
+                } else {  //If there is a space in the sentence, have a 1 second break
                     System.out.println("SPACE");
                     try {
                         Thread.sleep(1000);
+                        //Compensate the 1 second wait, by detracting 1000ms from the timer
                         timer -= 1000;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
-
-
         }
     }
+
 }
