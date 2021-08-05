@@ -102,7 +102,7 @@ public class Controller {
 
                                 if(morseToParse.charAt(k) == 'S'){
                                     System.out.println("Short");
-                                    vibrate(timer, 700, 150);
+                                    vibrate(timer, 600, 150);
 
                                 } else if (morseToParse.charAt(k) == 'L'){
                                     System.out.println("Long");
@@ -187,7 +187,7 @@ public class Controller {
 
                 if(stringParse == 'S'){
                     System.out.println("Short");
-                    vibrate(timer, 700, 150);
+                    vibrate(timer, 600, 150);
 
                 } else if (stringParse == 'L'){
                     System.out.println("Long");
