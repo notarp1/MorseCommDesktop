@@ -17,6 +17,7 @@ public class Controller {
     private ArrayList<String> morseLetterSentence;
     private Decoder decoder;
     private MyView view;
+    StringBuilder sentenceToDisplay;
 
     private static Controller INSTANCE = null;
 
@@ -45,6 +46,7 @@ public class Controller {
         word = new ArrayList<>();
         currController = controllers.getControllerIndex(0);
         morseLetterSentence = new ArrayList<>();
+        sentenceToDisplay =  new StringBuilder();
 
         System.out.println("PRESS A FOR SHORT \nPRESS X FOR LONG \nPRESS Y TO ADD LETTER \nPRESS B TO SEND WORD");
         run();
@@ -76,13 +78,20 @@ public class Controller {
                         addLetter();
                         break;
                     }
+                    if(currController.isButtonJustPressed(ControllerButton.RIGHTBUMPER)){
+                        sentenceToDisplay = new StringBuilder();
+                        view.tekst.setText(sentenceToDisplay.toString());
+                    }
                     /* If button B is pressed display word to GUI, vibrate word to user */
                     if (currController.isButtonJustPressed(ControllerButton.B)) {
 
                         //Convert Character array to String
-                        StringBuilder wordToDisplay = new StringBuilder();
-                        for (Character character : word) wordToDisplay.append(character);
-                        view.tekst.setText(wordToDisplay.toString());
+
+                        StringBuilder wordToAdd = new StringBuilder();
+                        for (Character character : word) wordToAdd.append(character);
+                        sentenceToDisplay.append(wordToAdd);
+                        sentenceToDisplay.append(" ");
+                        view.tekst.setText(sentenceToDisplay.toString());
 
                         //Reset word array, so a new word can be entered
                         word = new ArrayList<>();
@@ -102,11 +111,11 @@ public class Controller {
 
                                 if(morseToParse.charAt(k) == 'S'){
                                     System.out.println("Short");
-                                    vibrate(timer, 600, 150);
+                                    //vibrate(timer, 600, 150);
 
                                 } else if (morseToParse.charAt(k) == 'L'){
                                     System.out.println("Long");
-                                    vibrate(timer, 500, 400);
+                                    //vibrate(timer, 500, 400);
                                 }
                             }
                         }

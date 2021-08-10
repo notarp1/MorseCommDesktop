@@ -16,7 +16,7 @@
         </constraints>
         <properties>
           <font size="28"/>
-          <text value="MorseComm version 0.1"/>
+          <text value="MorzeCom version 0.1"/>
         </properties>
       </component>
       <component id="22e2c" class="javax.swing.JLabel" binding="tekst">
