@@ -16,7 +16,7 @@ public class Controller {
     private ControllerIndex currController;
     private ArrayList<String> morseLetterSentence;
     private Decoder decoder;
-    private MyView view;
+    private MainGUI view;
 
     private static Controller INSTANCE = null;
 
@@ -32,7 +32,7 @@ public class Controller {
     }
 
     /** Method for setting the view from the MyView.java class */
-    void setView(MyView view) {
+    void setView(MainGUI view) {
         this.view = view;
     }
 
@@ -82,7 +82,7 @@ public class Controller {
                         //Convert Character array to String
                         StringBuilder wordToDisplay = new StringBuilder();
                         for (Character character : word) wordToDisplay.append(character);
-                        view.tekst.setText(wordToDisplay.toString());
+                        view.sentenceGUI.setText(wordToDisplay.toString());
 
                         //Reset word array, so a new word can be entered
                         word = new ArrayList<>();

@@ -24,7 +24,7 @@ public class Decoder {
      * @param view reference to the GUI, to update and display words.
      * @return returns the word array, which has been updated
      */
-    ArrayList<Character> decodeMorse(String morseLetterCombination, ArrayList<Character> word, MyView view) {
+    ArrayList<Character> decodeMorse(String morseLetterCombination, ArrayList<Character> word, MainGUI view) {
         switch (morseLetterCombination) {
             case "SL":
                 word.add('A');
