@@ -94,7 +94,7 @@
               <component id="11f29" class="javax.swing.JLabel" binding="currinput">
                 <constraints border-constraint="Center"/>
                 <properties>
-                  <font size="22" style="1"/>
+                  <font size="28" style="1"/>
                   <foreground color="-16777216"/>
                   <horizontalAlignment value="0"/>
                   <text value="-"/>
@@ -103,10 +103,10 @@
               <component id="a2686" class="javax.swing.JLabel">
                 <constraints border-constraint="North"/>
                 <properties>
-                  <font size="22" style="1"/>
+                  <font size="22" style="3"/>
                   <foreground color="-16777216"/>
                   <horizontalAlignment value="0"/>
-                  <text value="Current Input"/>
+                  <text value="CURRENT INPUT"/>
                 </properties>
               </component>
             </children>
@@ -135,16 +135,16 @@
               <component id="30e1e" class="javax.swing.JLabel">
                 <constraints border-constraint="North"/>
                 <properties>
-                  <font size="22" style="1"/>
+                  <font size="22" style="3"/>
                   <foreground color="-16777216"/>
                   <horizontalAlignment value="0"/>
-                  <text value="Current Sentence"/>
+                  <text value="CURRENT SENTENCE"/>
                 </properties>
               </component>
               <component id="58535" class="javax.swing.JLabel" binding="sentenceGUI">
                 <constraints border-constraint="Center"/>
                 <properties>
-                  <font size="22" style="1"/>
+                  <font size="28" style="1"/>
                   <foreground color="-16777216"/>
                   <horizontalAlignment value="0"/>
                   <text value="-"/>
@@ -189,11 +189,11 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <font size="22" style="1"/>
+                  <font size="22" style="3"/>
                   <foreground color="-16777216"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="Text to Morse"/>
+                  <text value="INPUT YOUR TEXT HERE"/>
                   <verticalAlignment value="1"/>
                   <verticalTextPosition value="1"/>
                 </properties>

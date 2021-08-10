@@ -33,7 +33,7 @@ public class Controller {
         return INSTANCE;
     }
 
-    /** Method for setting the view from the MyView.java class */
+    /** Method for setting the view from the MainGUI.java class */
     void setView(MainGUI view) {
         this.view = view;
     }
@@ -81,7 +81,7 @@ public class Controller {
                     }
                     if(currController.isButtonJustPressed(ControllerButton.RIGHTBUMPER)){
                         sentenceToDisplay = new StringBuilder();
-                        view.tekst.setText(sentenceToDisplay.toString());
+                        view.sentenceGUI.setText(sentenceToDisplay.toString());
                     }
                     /* If button B is pressed display word to GUI, vibrate word to user */
                     if (currController.isButtonJustPressed(ControllerButton.B)) {
@@ -92,7 +92,7 @@ public class Controller {
                         for (Character character : word) wordToAdd.append(character);
                         sentenceToDisplay.append(wordToAdd);
                         sentenceToDisplay.append(" ");
-                        view.tekst.setText(sentenceToDisplay.toString());
+                        view.sentenceGUI.setText(sentenceToDisplay.toString());
 
                         //Reset word array, so a new word can be entered
                         word = new ArrayList<>();
