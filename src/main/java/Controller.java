@@ -16,8 +16,9 @@ public class Controller {
     private ControllerIndex currController;
     private ArrayList<String> morseLetterSentence;
     private Decoder decoder;
-    private MyView view;
+    private MainGUI view;
     StringBuilder sentenceToDisplay;
+
 
     private static Controller INSTANCE = null;
 
@@ -33,7 +34,7 @@ public class Controller {
     }
 
     /** Method for setting the view from the MyView.java class */
-    void setView(MyView view) {
+    void setView(MainGUI view) {
         this.view = view;
     }
 
